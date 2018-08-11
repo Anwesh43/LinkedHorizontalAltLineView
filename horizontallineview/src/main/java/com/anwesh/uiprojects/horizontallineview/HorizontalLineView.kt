@@ -9,8 +9,24 @@ import android.view.MotionEvent
 import android.content.Context
 import android.graphics.Paint
 import android.graphics.Canvas
+import android.graphics.Color
 
 val nodes : Int = 5
+
+fun Canvas.drawHLNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val factor : Int = 1 - 2 * (i % 2)
+    val gap : Float = w / nodes
+    paint.strokeWidth = Math.min(w, h) / 60
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.color = Color.parseColor("#FF9800")
+    save()
+    translate(i * gap, h/2)
+    rotate(90f * factor * scale)
+    drawLine(0f, 0f, 0f, -gap * factor, paint)
+    restore()
+}
 
 class HorizontalLineView(ctx : Context) : View(ctx) {
 
