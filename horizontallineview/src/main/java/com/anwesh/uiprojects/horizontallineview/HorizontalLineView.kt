@@ -163,4 +163,27 @@ class HorizontalLineView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : HorizontalLineView) {
+
+        private val hl : LinkedHorizontalLine = LinkedHorizontalLine(0)
+
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            hl.draw(canvas, paint)
+            animator.animate {
+                hl.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            hl.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
