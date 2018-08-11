@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.horizontallineview
  * Created by anweshmishra on 11/08/18.
  */
 
+import android.app.Activity
 import android.view.View
 import android.view.MotionEvent
 import android.content.Context
@@ -186,6 +187,15 @@ class HorizontalLineView(ctx : Context) : View(ctx) {
             hl.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+
+        fun create(activity : Activity) : HorizontalLineView {
+            val view : HorizontalLineView = HorizontalLineView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
