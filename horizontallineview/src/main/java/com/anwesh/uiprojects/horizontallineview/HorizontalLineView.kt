@@ -34,10 +34,16 @@ class HorizontalLineView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    var animationListener : AnimationListener? = null
+
     private val renderer : Renderer = Renderer(this)
 
     override fun onDraw(canvas : Canvas) {
         renderer.render(canvas, paint)
+    }
+
+    fun addAnimationListener(onComplete : (Int) -> Unit, onReset : (Int) -> Unit) {
+        animationListener = AnimationListener(onComplete, onReset)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
@@ -180,6 +186,10 @@ class HorizontalLineView(ctx : Context) : View(ctx) {
             animator.animate {
                 hl.update {i, scl ->
                     animator.stop()
+                    when(scl) {
+                        1f -> view.animationListener?.onComplete?.invoke(i)
+                        0f -> view.animationListener?.onReset?.invoke(i)
+                    }
                 }
             }
         }
@@ -199,4 +209,6 @@ class HorizontalLineView(ctx : Context) : View(ctx) {
             return view
         }
     }
+
+    data class AnimationListener(var onComplete : (Int) -> Unit, var onReset : (Int) -> Unit)
 }
